@@ -70,26 +70,30 @@ public class BookController {
                 result.rejectValue("title", "error.value", "書籍名は必須です");
                 errTitleFlg = true;
             }
-            if (isbnExist == null || isbnExist.trim().isEmpty()){
-                result.rejectValue("isbn", "error.value", "ISBNは必須です");
-                errIsbnFlg = true;
-            }
             if (bookMstDto.getTitle().length() > 50) {
                 result.rejectValue("title", "error.value", "書籍名は50文字以下で入力してください");
                 errTitleFlg = true;
             }
-            if(String.valueOf(isbnExist) .length() != 13) {
+            if (isbnExist == null || isbnExist.trim().isEmpty()){
+                result.rejectValue("isbn", "error.value", "ISBNは必須です");
+                errIsbnFlg = true;
+            }
+            // if (bookMstDto.getTitle().length() > 50) {
+            //     result.rejectValue("title", "error.value", "書籍名は50文字以下で入力してください");
+            //     errTitleFlg = true;
+            // }
+            else if(String.valueOf(isbnExist) .length() != 13) {
                 result.rejectValue("isbn", "error.value", "ISBNは13桁で入力してください");
                 errIsbnFlg = true;
             }
             
-            if (!String.valueOf(isbnExist).matches("\\d+")) {
+            else if (!String.valueOf(isbnExist).matches("\\d+")) {
                 result.rejectValue("isbn", "error.value", "ISBNは半角数字のみで入力してください");
                 errIsbnFlg = true;
             }
             
 
-            if (bookMstService.selectByIsbn(bookMstDto.getIsbn()) != null) {
+            else if (bookMstService.selectByIsbn(bookMstDto.getIsbn()) != null) {
             result.rejectValue("isbn", "error.value", "登録済みのISBNです");
             errIsbnFlg = true;
             }
@@ -107,7 +111,7 @@ public class BookController {
             ra.addFlashAttribute("bookDto", bookMstDto);
             ra.addFlashAttribute("org.springframework.validation.BindingResult.bookMst", result);
            
-            bookMstService.save(bookMstDto);
+            
 
             
 
