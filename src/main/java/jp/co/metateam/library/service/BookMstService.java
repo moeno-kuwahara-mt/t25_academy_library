@@ -25,6 +25,14 @@ public class BookMstService {
         this.bookMstRepository = bookMstRepository;
     }
     
+    public BookMst selectByTitle(String title){
+        return this.bookMstRepository.findByTitle(title).orElse(null);
+    }
+    public BookMst selectByIsbn(String isbn){
+        return this.bookMstRepository.findByIsbn(isbn).orElse(null);
+    }
+    
+
     public List<BookMstDto> findAvailableWithStockCount() {
         List<BookMst> books = this.bookMstRepository.findLimitedBook();
         List<BookMstDto> bookMstDtoList = new ArrayList<BookMstDto>();
@@ -42,7 +50,21 @@ public class BookMstService {
 
         return bookMstDtoList;
     }
-    
+    @Transactional
+    public void save(BookMstDto bookMstDto) {
+        try {
+            BookMst bookMst = new BookMst();
+
+            bookMst.setTitle(bookMstDto.getTitle());
+            bookMst.setIsbn(bookMstDto.getIsbn());
+
+            // データベースへの保存
+            this.bookMstRepository.save(bookMst);
+
+        } catch (Exception e) {
+            throw e;
+        }
+    }   
 }
 
 
